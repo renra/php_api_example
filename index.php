@@ -9,8 +9,11 @@
     </h1>
 
     <?
-      require("./auth.php");
-      require("./resource.php");
+      require_once("./auth.php");
+      require_once("./resource.php");
+      require_once("./check_request_type.php");
+
+      check_request_type("GET");
 
       echo("Let's go through the lifecycle of the resource<br>");
       $all = Resource::all();

@@ -63,5 +63,9 @@
         // do a delete
       }
     }
+
+    public function attributes(){
+      return array("attribute" => $this->attribute);
+    }
   };
 ?>

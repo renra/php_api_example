@@ -1,13 +1,17 @@
 <?
-  // Token would be later in db per client
-  const TOKEN = '1234';
-  const UNAUTHORIZED = 401;
+  require_once("./http_statuses.php");
 
-  $headers = getallheaders();
+  // Token would be later in db and will identify a client
+  const TOKEN = "1234";
+
+  $_headers = getallheaders();
   $token = NULL;
 
-  if(isset($headers["Authentication"])){
-    $token = $headers["Authentication"];
+  // Accept  application/json
+  // $_SERVER["REQUEST_METHOD"] -- GET, POST, PUT, DELETE
+
+  if(isset($_headers["Authentication"])){
+    $token = $_headers["Authentication"];
   }
   else if(isset($_GET["token"])){
     // This is here just so that index works with ?token=1234
@@ -15,7 +19,7 @@
   }
 
   if($token != TOKEN){
-    http_response_code(UNAUTHORIZED);
+    http_response_code(\HTTPStatuses\UNAUTHORIZED);
     exit("Not authorized");
   }
 
