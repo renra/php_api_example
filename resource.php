@@ -1,12 +1,20 @@
 <?
+  require_once("./settings.php");
+
   class Resource {
     private $id = NULL;
     private $attribute = NULL;
+    private $errors = NULL;
 
 
     // Fill in reasonable default values if necessary
-    public function __construct(){
+    public function __construct($attributes = array()){
+      $this->verbose = FALSE;
       $this->attribute = "Default attribute value";
+
+      foreach($attributes as $key => $value){
+        $this->$key = $value;
+      }
     }
 
     // Just in case we want to process the data somehow
@@ -25,16 +33,31 @@
     //   something in the spirit of https://rubygems.org/gems/activerecord
 
     public static function all(){
-      echo("Fetching all records<br>");
+      if(Settings::$verbose){
+        echo("Fetching all records<br>");
+      }
     }
 
     public static function find($id){
-      echo("Fetching record with id " . $id . "<br>");
+      if(Settings::$verbose){
+        echo("Fetching record with id " . $id . "<br>");
+      }
     }
 
     public function is_valid(){
-      // Some conditions may come here
+      $this->errors = array();
+
+      // Some conditions may come here and errors can be filled
+
       return TRUE;
+    }
+
+    public function update_attributes($attributes = array()){
+      foreach($attributes as $key => $value){
+        $this->$key = $value;
+      }
+
+      return $this.save();
     }
 
     public function save(){
@@ -43,11 +66,17 @@
       if($retval){
 
         if(isset($this->id)){
-          echo("Updating record with id " . $this->id . "<br>");
+          if(Settings::$verbose){
+            echo("Updating record with id " . $this->id . "<br>");
+          }
+
           // do an update
         }
         else{
-          echo("Creating record<br>");
+          if(Settings::$verbose){
+            echo("Creating record<br>");
+          }
+
           // do an insert which should return an id
           $this->id = 1;
         }
@@ -59,7 +88,10 @@
 
     public function destroy(){
       if(isset($this->id)){
-        echo("Deleting record with id " . $this->id . "<br>");
+        if(Settings::$verbose){
+          echo("Deleting record with id " . $this->id . "<br>");
+        }
+
         // do a delete
       }
     }

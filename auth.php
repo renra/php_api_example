@@ -22,6 +22,4 @@
     http_response_code(\HTTPStatuses\UNAUTHORIZED);
     exit("Not authorized");
   }
-
-  echo("<br>");
 ?>
