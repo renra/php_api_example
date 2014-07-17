@@ -16,7 +16,7 @@
       $resource->save();
 
       $url = TestUtils::get_url($this->action_path."?id=".$resource->id);
-      $results = TestUtils::curl_url($url, Settings::TOKEN);
+      $results = TestUtils::curl_url($url, "GET", NULL, Settings::TOKEN);
 
       $expected_response = json_encode($resource->attributes());
 
@@ -36,7 +36,9 @@
 
     public function testNotAcceptable() {
       $url = TestUtils::get_url($this->action_path."?id=1");
-      $results = TestUtils::curl_url($url, Settings::TOKEN, 'text/html');
+      $results = TestUtils::curl_url(
+        $url, "GET", NULL, Settings::TOKEN, 'text/html'
+      );
 
       $this->assertEquals("", $results["response_body"]);
       $this->assertEquals(406, $results["status_code"]);
@@ -45,7 +47,16 @@
 
     public function testNotFound() {
       $url = TestUtils::get_url($this->action_path);
-      $results = TestUtils::curl_url($url, Settings::TOKEN);
+      $results = TestUtils::curl_url($url, "GET", NULL, Settings::TOKEN);
+
+      $this->assertEquals("", $results["response_body"]);
+      $this->assertEquals(404, $results["status_code"]);
+      $this->assertEquals("application/json", $results["content_type"]);
+    }
+
+    public function testWrongVerb() {
+      $url = TestUtils::get_url($this->action_path);
+      $results = TestUtils::curl_url($url, "DELETE", NULL, Settings::TOKEN);
 
       $this->assertEquals("", $results["response_body"]);
       $this->assertEquals(404, $results["status_code"]);
@@ -54,7 +65,7 @@
 
     public function testSuccess() {
       $url = TestUtils::get_url($this->action_path."?id=1");
-      $results = TestUtils::curl_url($url, Settings::TOKEN);
+      $results = TestUtils::curl_url($url, "GET", NULL, Settings::TOKEN);
 
       $expected_response = '{"attribute":"value1"}';
 

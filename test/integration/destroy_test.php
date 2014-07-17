@@ -4,30 +4,28 @@
   require_once("test/integration/test_utils.php");
 
 
-  class AllTest extends PHPUnit_Framework_TestCase {
+  class DestroyTest extends PHPUnit_Framework_TestCase {
 
-    private $action_path = "all.php";
+    private $action_path = "destroy.php";
 
     // Cannot work fully without db backend
     public function testWithDB() {
-      $value = "my custom value";
-
-      $resource = new Resource(array("attribute" => $value));
+      $resource = new Resource();
       $resource->save();
 
-      $url = TestUtils::get_url($this->action_path);
-      $results = TestUtils::curl_url($url, "GET", NULL, Settings::TOKEN);
+      $url = TestUtils::get_url($this->action_path."?id=".$resource->id);
+      $results = TestUtils::curl_url($url, "DELETE", NULL, Settings::TOKEN);
 
-      $expected_response = json_encode(array($resource->attributes()));
-
-      //$this->assertEquals($expected_response, $results["response_body"]);
-      $this->assertEquals(200, $results["status_code"]);
+      $this->assertEquals("", $results["response_body"]);
+      $this->assertEquals(204, $results["status_code"]);
       $this->assertEquals("application/json", $results["content_type"]);
+
+      $this->assertNULL(Resource::find($resource->id));
     }
 
     public function testUnauthorized() {
-      $url = TestUtils::get_url($this->action_path);
-      $results = TestUtils::curl_url($url);
+      $url = TestUtils::get_url($this->action_path."?id=1");
+      $results = TestUtils::curl_url($url, "DELETE", NULL);
 
       $this->assertEquals("", $results["response_body"]);
       $this->assertEquals(401, $results["status_code"]);
@@ -35,9 +33,9 @@
     }
 
     public function testNotAcceptable() {
-      $url = TestUtils::get_url($this->action_path);
+      $url = TestUtils::get_url($this->action_path."?id=1");
       $results = TestUtils::curl_url(
-        $url, "GET", NULL, Settings::TOKEN, 'text/html'
+        $url, "DELETE", NULL, Settings::TOKEN, 'text/html'
       );
 
       $this->assertEquals("", $results["response_body"]);
@@ -45,7 +43,7 @@
       $this->assertEquals("application/json", $results["content_type"]);
     }
 
-    public function testWrongVerb() {
+    public function testNotFound() {
       $url = TestUtils::get_url($this->action_path);
       $results = TestUtils::curl_url($url, "DELETE", NULL, Settings::TOKEN);
 
@@ -54,14 +52,21 @@
       $this->assertEquals("application/json", $results["content_type"]);
     }
 
-    public function testSuccess() {
+    public function testWrongVerb() {
       $url = TestUtils::get_url($this->action_path);
       $results = TestUtils::curl_url($url, "GET", NULL, Settings::TOKEN);
 
-      $expected_response = '[{"attribute":"value1"},{"attribute":"value2"},{"attribute":"Default attribute value"}]';
+      $this->assertEquals("", $results["response_body"]);
+      $this->assertEquals(404, $results["status_code"]);
+      $this->assertEquals("application/json", $results["content_type"]);
+    }
 
-      $this->assertEquals($expected_response, $results["response_body"]);
-      $this->assertEquals(200, $results["status_code"]);
+    public function testSuccess() {
+      $url = TestUtils::get_url($this->action_path."?id=1");
+      $results = TestUtils::curl_url($url, "DELETE", NULL, Settings::TOKEN);
+
+      $this->assertEquals("", $results["response_body"]);
+      $this->assertEquals(204, $results["status_code"]);
       $this->assertEquals("application/json", $results["content_type"]);
     }
   }

@@ -6,10 +6,23 @@
       return "localhost/" . self::$domain_tail . $action_path;
     }
 
-    public static function curl_url($url, $token = NULL, $accepted_content_type = "application/json"){
+    public static function curl_url(
+      $url,
+      $http_verb = "GET",
+      $data = NULL,
+      $token = NULL,
+      $accepted_content_type = "application/json"
+    ){
+
       $curl = curl_init($url);
 
       curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+      curl_setopt($curl, CURLOPT_CUSTOMREQUEST, $http_verb);
+
+      if($http_verb == "POST" || $http_verb == "PUT"){
+        curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+      }
+
       curl_setopt(
         $curl, CURLOPT_HTTPHEADER, array(
           "Accept:".$accepted_content_type,
