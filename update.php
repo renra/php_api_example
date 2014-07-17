@@ -6,37 +6,29 @@
   require_once("./resource.php");
 
   require_once("./http_statuses.php");
-  require_once("./settings.php");
 
   check_request_type("PUT");
 
   $resource_params = array();
 
-  if(!isset($_POST["id"])){
-    http_response_code(\HTTPStatuses\NOT_FOUND);
-    exit(Settings::$verbose ? "Cannot find record without an id" : "");
+  if(!isset($_GET["id"])){
+    render_status(\HTTPStatuses\NOT_FOUND);
   }
 
   if(isset($_POST["resource"])){
     $resource_params = $_POST["resource"];
   }
 
-  $resource = Resource::find($_POST["id"]);
+  $resource = Resource::find($_GET["id"]);
+
+  // Stub
+  $resource = new Resource();
 
   if($resource->update_attributes($resource_params)){
-    header(
-      "Content-Type: application/json",
-      true,
-      \HTTPStatuses\CREATED
-    );
+    render_status(\HTTPStatuses\CREATED);
   }
   else {
-    header(
-      "Content-Type: application/json",
-      true,
-      \HTTPStatuses\UNPROCESSABLE_ENTITY
-    );
-
+    render_status(\HTTPStatuses\UNPROCESSABLE_ENTITY, FALSE);
     echo(json_encode($resource->errors()));
   }
 ?>
