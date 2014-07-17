@@ -9,7 +9,6 @@
 
     // Fill in reasonable default values if necessary
     public function __construct($attributes = array()){
-      $this->verbose = FALSE;
       $this->attribute = "Default attribute value";
 
       foreach($attributes as $key => $value){
@@ -31,6 +30,9 @@
     // The following are stubbed methods for db communication
     //   I hope that in PHP they can be provided by some ORM
     //   something in the spirit of https://rubygems.org/gems/activerecord
+
+    // I'm also relying on the fact that this ORM will provide protection
+    //   from SQL injection
 
     public static function all(){
       if(Settings::$verbose){
@@ -62,9 +64,9 @@
     }
 
     public function save(){
-      $retval = $this->is_valid();
+      $success = $this->is_valid();
 
-      if($retval){
+      if($success){
 
         if(isset($this->id)){
           if(Settings::$verbose){
@@ -78,13 +80,13 @@
             echo("Creating record<br>");
           }
 
-          // do an insert which should return an id
+          // do an insert and get the id
           $this->id = 1;
         }
 
       }
 
-      return $retval;
+      return $success;
     }
 
     public function destroy(){
