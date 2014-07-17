@@ -6,6 +6,7 @@
     private $attribute = NULL;
     private $errors = NULL;
 
+    private static $last_id = 0;
 
     // Fill in reasonable default values if necessary
     public function __construct($attributes = array()){
@@ -81,7 +82,7 @@
           }
 
           // do an insert and get the id
-          $this->id = 1;
+          $this->id = ++self::$last_id;
         }
 
       }
@@ -100,7 +101,10 @@
     }
 
     public function attributes(){
-      return array("attribute" => $this->attribute);
+      return array(
+        "id" => $this->id,
+        "attribute" => $this->attribute
+      );
     }
   };
 ?>

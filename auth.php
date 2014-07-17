@@ -13,6 +13,7 @@
     $token = $_headers["Authentication"];
   }
 
+  // Token would be later in db and identify a user/client
   if($token != Settings::TOKEN){
     render_status(\HTTPStatuses\UNAUTHORIZED);
   }

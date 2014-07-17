@@ -58,7 +58,7 @@
       $url = TestUtils::get_url($this->action_path);
       $results = TestUtils::curl_url($url, "GET", NULL, Settings::TOKEN);
 
-      $expected_response = '[{"attribute":"value1"},{"attribute":"value2"},{"attribute":"Default attribute value"}]';
+      $expected_response = '[{"id":1,"attribute":"value1"},{"id":2,"attribute":"value2"}]';
 
       $this->assertEquals($expected_response, $results["response_body"]);
       $this->assertEquals(200, $results["status_code"]);

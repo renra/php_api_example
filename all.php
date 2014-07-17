@@ -8,20 +8,24 @@
   check_request_type("GET");
 
   $resources = Resource::all();
-
-  //Stubbing some resources since I have no db backend
-  $resources = array(
-    new Resource(array("attribute" => "value1")),
-    new Resource(array("attribute" => "value2")),
-    new Resource()
-  );
-
   $resp_array = array();
 
-  // mapping
+  // Stubbing some resources since I have no db backend
+  $resource1 = new Resource(array("attribute" => "value1"));
+  $resource1->save();
+
+  $resource2 = new Resource(array("attribute" => "value2"));
+  $resource2->save();
+
+  $resources = array($resource1, $resource2);
+  //
+
+
+  // Mapping
   foreach($resources as $resource){
     array_push($resp_array, $resource->attributes());
   }
+  //
 
   header("Content-Type: application/json");
   echo(json_encode($resp_array));

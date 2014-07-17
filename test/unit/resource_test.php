@@ -9,6 +9,19 @@
       $this->assertEquals($value, $resource->attribute);
     }
 
+    public function testAttributes() {
+      $value = "value";
+      $resource = new Resource(array("attribute" => $value));
+      $resource->save();
+
+      $expected_result = array(
+        "id" => $resource->id,
+        "attribute" => $resource->attribute
+      );
+
+      $this->assertEquals($expected_result, $resource->attributes());
+    }
+
     public function testUpdateAttributes() {
       $value = "value";
       $resource = new Resource();

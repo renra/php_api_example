@@ -17,6 +17,7 @@
 
   //Stubbing the resource since I have no db backend
   $resource = new Resource(array("attribute" => "value1"));
+  $resource->save();
 
   header("Content-Type: application/json");
   echo(json_encode($resource->attributes()));
