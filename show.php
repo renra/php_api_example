@@ -6,13 +6,11 @@
   require_once("./resource.php");
 
   require_once("./http_statuses.php");
-  require_once("./verbose_exit.php");
 
   check_request_type("GET");
 
   if(!isset($_GET["id"])){
-    http_response_code(\HTTPStatuses\NOT_FOUND);
-    verbose_exit("Cannot find record without an id");
+    render_status(\HTTPStatuses\NOT_FOUND);
   }
 
   $resource = Resource::find($_GET["id"]);
