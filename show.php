@@ -15,7 +15,7 @@
 
   $resource = Resource::find($_GET["id"]);
 
-  //Stubbing the response since I have no db backend
+  //Stubbing the resource since I have no db backend
   $resource = new Resource(array("attribute" => "value1"));
 
   header("Content-Type: application/json");

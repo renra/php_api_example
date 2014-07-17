@@ -17,10 +17,9 @@
 
   $resource = new Resource($resource_params);
 
-  header("Content-Type: application/json");
-
   if($resource->save()){
-    render_status(\HTTPStatuses\CREATED);
+    render_status(\HTTPStatuses\CREATED, FALSE);
+    echo($resource->id);
   }
   else {
     render_status(\HTTPStatuses\UNPROCESSABLE_ENTITY, FALSE);

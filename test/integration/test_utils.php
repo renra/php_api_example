@@ -19,8 +19,8 @@
       curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
       curl_setopt($curl, CURLOPT_CUSTOMREQUEST, $http_verb);
 
-      if($http_verb == "POST" || $http_verb == "PUT"){
-        curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+      if(($http_verb == "POST" || $http_verb == "PUT") && is_array($data)){
+        curl_setopt($curl, CURLOPT_POSTFIELDS, http_build_query($data));
       }
 
       curl_setopt(
