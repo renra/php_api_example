@@ -45,11 +45,12 @@
     }
 
     public function is_valid(){
+      //Clean every time it's called
       $this->errors = array();
 
       // Some conditions may come here and errors can be filled
 
-      return TRUE;
+      return count($this->errors) > 0 ? FALSE : TRUE;
     }
 
     public function update_attributes($attributes = array()){
@@ -57,7 +58,7 @@
         $this->$key = $value;
       }
 
-      return $this.save();
+      return $this->save();
     }
 
     public function save(){

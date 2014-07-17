@@ -6,7 +6,6 @@
   require_once("./resource.php");
 
   require_once("./http_statuses.php");
-  require_once("./settings.php");
 
   check_request_type("POST");
 
@@ -21,19 +20,10 @@
   header("Content-Type: application/json");
 
   if($resource->save()){
-    header(
-      "Content-Type: application/json",
-      true,
-      \HTTPStatuses\CREATED
-    );
+    render_status(\HTTPStatuses\CREATED);
   }
   else {
-    header(
-      "Content-Type: application/json",
-      true,
-      \HTTPStatuses\UNPROCESSABLE_ENTITY
-    );
-
+    render_status(\HTTPStatuses\UNPROCESSABLE_ENTITY, FALSE);
     echo(json_encode($resource->errors()));
   }
 ?>

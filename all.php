@@ -9,7 +9,7 @@
 
   $resources = Resource::all();
 
-  //Stubbing some responses since I have no db backend
+  //Stubbing some resources since I have no db backend
   $resources = array(
     new Resource(array("attribute" => "value1")),
     new Resource(array("attribute" => "value2")),
@@ -18,6 +18,7 @@
 
   $resp_array = array();
 
+  // mapping
   foreach($resources as $resource){
     array_push($resp_array, $resource->attributes());
   }

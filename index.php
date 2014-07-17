@@ -9,12 +9,8 @@
     </h1>
 
     <?
-      require_once("./auth.php");
-      require_once("./check_request_type.php");
-
       require_once("./resource.php");
 
-      check_request_type("GET");
       Settings::$verbose = TRUE;
 
       echo("Let's go through the lifecycle of the resource<br>");
